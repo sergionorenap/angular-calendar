@@ -1,0 +1,55 @@
+<div class="reminder-form-container">
+  <h2 *ngIf="!isEditMode" mat-dialog-title>New reminder</h2>
+  <h2 *ngIf="isEditMode" mat-dialog-title>Edit reminder</h2>
+  <mat-dialog-content>
+    <form [formGroup]="reminderForm" class="reminder-form">
+      <mat-form-field class="form-field">
+        <input
+          matInput
+          type="text"
+          placeholder="Description *"
+          formControlName="text"
+          maxlength="30"
+        />
+      </mat-form-field>
+
+      <mat-form-field class="form-field">
+        <mat-select placeholder="Color *" formControlName="color">
+          <mat-option *ngFor="let color of colors" [value]="color">
+            {{ color | titlecase }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <app-city-picker
+        [required]="true"
+        [defaultSelectedCity]="reminder?.city"
+        (selectedCity)="onSelectedCityChanges($event)"
+      ></app-city-picker>
+
+      <app-time-picker
+        [defaultSelectedTime]="reminder?.time"
+        (onSelectedTime)="onSelectedTimeChanges($event)"
+      ></app-time-picker>
+
+      <div class="date-section">
+        <app-calendar-table
+          [mini]="true"
+          [defaultSelectedDate]="reminder?.date || selectedDate"
+          (onSelectedDate)="onSelectedDateChanges($event)"
+        ></app-calendar-table>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-button [mat-dialog-close]="true">Cancel</button>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="reminderForm.invalid"
+      (click)="onSaveReminder()"
+    >
+      Save
+    </button>
+  </mat-dialog-actions>
+</div>

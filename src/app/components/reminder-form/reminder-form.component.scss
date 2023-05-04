@@ -1,0 +1,30 @@
+.reminder-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  & .form-field:nth-child(1) {
+    grid-column: 1 / 3;
+  }
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: end;
+}
+
+@media (max-width: 640px) {
+  .reminder-form {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0;
+
+    & .form-field:nth-child(1) {
+      grid-column: 1;
+    }
+  }
+
+  .date-section {
+    display: flex;
+    justify-content: center;
+  }
+}

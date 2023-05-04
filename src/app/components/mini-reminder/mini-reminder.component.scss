@@ -1,0 +1,55 @@
+@import "../reminder/reminder-colors.scss";
+
+.reminder {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 4px;
+  padding: 1px 4px;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+  cursor: pointer;
+
+  &:hover .delete-btn {
+    display: block;
+  }
+
+  & .delete-btn {
+    display: none;
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    width: 20px;
+    height: 20px;
+    transition: all 0.2s;
+  }
+
+  & .delete-btn:hover {
+    transform: scale(1.3);
+  }
+
+  & .mat-icon {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    font-size: 20px;
+  }
+
+  &.none {
+    border: solid $none-border 1px;
+  }
+}
+
+// ----------- MEDIA -----------
+@media (max-width: 640px) {
+  .reminder {
+    padding: 3px 2px;
+    font-size: 12px;
+    hyphens: auto;
+    line-height: 90%;
+
+    &:hover .delete-btn {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,19 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.reminder-form {
+  display: flex;
+  justify-content: center;
+
+  & span {
+    padding-top: 16px;
+  }
+}
+
+.form-field {
+  width: 58px;
+  text-align: center;
+}

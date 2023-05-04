@@ -1,0 +1,9 @@
+<mat-toolbar>
+  <span>Angular Calendar</span>
+  <span class="spacer"></span>
+  <button mat-button (click)="openReminderForm()">
+    <mat-icon>add</mat-icon> New reminder
+  </button>
+</mat-toolbar>
+
+<app-calendar-table [reminders]="reminders"></app-calendar-table>

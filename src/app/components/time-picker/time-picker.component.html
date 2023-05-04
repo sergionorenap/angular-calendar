@@ -1,0 +1,21 @@
+<form [formGroup]="timeForm" class="reminder-form">
+  <mat-form-field class="form-field">
+    <input
+      matInput
+      type="number"
+      placeholder="HH"
+      formControlName="hours"
+      maxlength="2"
+    />
+  </mat-form-field>
+  <span>:</span>
+  <mat-form-field class="form-field">
+    <input
+      matInput
+      type="number"
+      placeholder="MM"
+      formControlName="minutes"
+      maxlength="2"
+    />
+  </mat-form-field>
+</form>

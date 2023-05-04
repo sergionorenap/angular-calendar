@@ -1,0 +1,47 @@
+$red: #cf1b26;
+$blue: #0058c4;
+$green: #49a834;
+$purple: #3f0f97;
+$yellow: #ffe14d;
+$orange: #f9752a;
+$none: transparent;
+$none-border: #8590d2;
+$light-text: #fff;
+$dark-text: #444;
+
+.reminder {
+  &.none {
+    background-color: $none;
+    color: $dark-text;
+  }
+
+  &.red {
+    background-color: $red;
+    color: $light-text;
+  }
+
+  &.blue {
+    background-color: $blue;
+    color: $light-text;
+  }
+
+  &.yellow {
+    background-color: $yellow;
+    color: $dark-text;
+  }
+
+  &.orange {
+    background-color: $orange;
+    color: $light-text;
+  }
+
+  &.green {
+    background-color: $green;
+    color: $light-text;
+  }
+
+  &.purple {
+    background-color: $purple;
+    color: $light-text;
+  }
+}

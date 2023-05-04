@@ -1,0 +1,29 @@
+.weather-section {
+  padding-top: 10px;
+  height: 110px;
+}
+
+.weather-info {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: right;
+
+  & span {
+    font-size: 1.2rem;
+
+    & .city-name {
+      text-transform: capitalize;
+    }
+    & .w-description {
+      font-size: 0.9rem;
+    }
+
+    & .forecast-info {
+      font-size: 0.7rem;
+      font-style: italic;
+      display: block;
+      line-height: 85%;
+    }
+  }
+}
