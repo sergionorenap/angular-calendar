@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject, Subscription } from 'rxjs';
+
 import { Reminder } from 'src/app/interfaces/reminder';
 import { CalendarService } from 'src/app/services/calendar.service';
-import { MatDialog } from '@angular/material/dialog';
 import { ReminderFormComponent } from '../reminder-form/reminder-form.component';
 import { ReminderService } from 'src/app/services/reminder.service';
 import { ReminderComponent } from '../reminder/reminder.component';
@@ -19,48 +19,24 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   reminders: Reminder[] = [];
 
+  private subscriptions = new Subscription();
+
   constructor(
+    private matDialog: MatDialog,
     private calendarService: CalendarService,
-    private reminderService: ReminderService,
-    private matDialog: MatDialog
+    private reminderService: ReminderService
   ) {}
 
   ngOnInit(): void {
-    this.calendarService
-      .list(new Date())
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((reminders: Reminder[]) => {
-        this.reminders = reminders;
-      });
-
-    // Reminders Update
-    this.calendarService.calendarObservable.subscribe((reminders) => {
-      this.reminders = [...reminders];
-    });
-
-    this.reminderService.reminderObservable.subscribe((result) => {
-      switch (result.action) {
-        case ReminderActionsEnum.CREATE:
-          this.openReminderForm(undefined, result.data);
-          break;
-        case ReminderActionsEnum.DELETE:
-          this._deleteReminder(result.data.id);
-          break;
-        case ReminderActionsEnum.OPEN_DETAILS:
-          this.openReminderDetails(result.data);
-          break;
-        default:
-          break;
-      }
-    });
+    this.subscribeToCalendarReminders();
+    this.subscribeToReminderActions();
   }
 
-  ngOnDestroy() {
-    this.onDestroy$.next(true);
-    this.onDestroy$.complete();
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
-  openReminderDetails(reminder: Reminder) {
+  openReminderDetails(reminder: Reminder): void {
     const dialogRef = this.matDialog.open(ReminderComponent, {
       width: '400px',
       data: reminder,
@@ -71,13 +47,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
         if (data.isEdit) {
           this.openReminderForm(reminder);
         } else {
-          this._deleteReminder(reminder.id);
+          this.goToDeleteReminder(reminder.id);
         }
       }
     });
   }
 
-  openReminderForm(reminder?: Reminder, selectedDate?: string) {
+  openReminderForm(reminder?: Reminder, selectedDate?: string): void {
     const dialogRef = this.matDialog.open(ReminderFormComponent, {
       width: '540px',
       data: { reminder, selectedDate },
@@ -85,16 +61,43 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((newReminder) => {
       if (typeof newReminder !== 'boolean' && newReminder) {
-        this._saveReminder(newReminder);
+        this.goToSaveReminder(newReminder);
       }
     });
   }
 
-  private _saveReminder(reminder: Reminder): void {
+  private goToDeleteReminder(reminderId: string): void {
+    this.calendarService.delete(reminderId);
+  }
+
+  private goToSaveReminder(reminder: Reminder): void {
     this.calendarService.save(reminder);
   }
 
-  private _deleteReminder(reminderId: string): void {
-    this.calendarService.delete(reminderId);
+  private subscribeToCalendarReminders() {
+    this.subscriptions.add(
+      this.calendarService
+        .onRemindersUpdated$()
+        .subscribe((reminders) => (this.reminders = [...reminders]))
+    );
+  }
+
+  private subscribeToReminderActions(): void {
+    this.reminderService.reminderObservable.subscribe((result) => {
+
+      switch (result.action) {
+        case ReminderActionsEnum.CREATE:
+          this.openReminderForm(undefined, result.data);
+          break;
+        case ReminderActionsEnum.DELETE:
+          this.goToDeleteReminder(result.data.id);
+          break;
+        case ReminderActionsEnum.OPEN_DETAILS:
+          this.openReminderDetails(result.data);
+          break;
+        default:
+          break;
+      }
+    });
   }
 }

@@ -1,27 +1,12 @@
-<div
-  [ngClass]="{ 'mini-calendar': mini, 'big-calendar': !mini }"
-  class="calendar"
->
+<div [ngClass]="{ 'mini-calendar': mini, 'big-calendar': !mini }" class="calendar">
   <div class="calendar-info">
-    <button
-      type="button"
-      mat-mini-fab
-      color="primary"
-      (click)="onChangeCalendarMonth(false)"
-      title="Previous month"
-    >
+    <button type="button" mat-mini-fab color="primary" (click)="onChangeCalendarMonth(false)" title="Previous month">
       <mat-icon>arrow_back</mat-icon>
     </button>
 
     <span>{{ currentCalendarMonth | date: "MMMM, yyyy" }}</span>
 
-    <button
-      type="button"
-      mat-mini-fab
-      color="primary"
-      (click)="onChangeCalendarMonth(true)"
-      title="Next month"
-    >
+    <button type="button" mat-mini-fab color="primary" (click)="onChangeCalendarMonth(true)" title="Next month">
       <mat-icon>arrow_forward</mat-icon>
     </button>
   </div>
@@ -41,24 +26,17 @@
     </li>
   </ul>
   <ol>
-    <li
-      *ngFor="let day of calendarDays; let first = first"
-      [style.gridColumnStart]="first ? day.dayInWeek + 1 : 'auto'"
-      (click)="onSelectedDateChanges(day.date)"
-      [ngClass]="{
+    <li *ngFor="let day of calendarDays; let first = first" [style.gridColumnStart]="first ? day.dayInWeek + 1 : 'auto'"
+      (click)="onSelectedDateChanges(day.date)" [ngClass]="{
         'selected-day': day.date === selectedDateStr,
         today: day.isToday,
         weekend: day.isWeekEnd
-      }"
-    >
+      }">
       <span>
         {{ day.dayInMonth }}
       </span>
 
-      <app-calendar-day
-        *ngIf="!mini"
-        [reminders]="day.reminders"
-      ></app-calendar-day>
+      <app-calendar-day *ngIf="!mini" [reminders]="day.reminders"></app-calendar-day>
     </li>
   </ol>
 </div>

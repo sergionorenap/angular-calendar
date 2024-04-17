@@ -1,50 +1,71 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Reminder } from '../interfaces/reminder';
 import { Utils } from '../utilities/utils';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CalendarService {
-  private calendarSubject = new Subject<Reminder[]>();
+  private readonly REMINDERS_KEY = 'REMINDERS';
 
-  calendarObservable = this.calendarSubject.asObservable();
+  private calendarSubject = new BehaviorSubject<Reminder[]>([]);
+  private reminders: Reminder[] = [];
 
-  reminders: Reminder[] = [];
-
-  constructor() {}
-
-  list(date: Date): Observable<Reminder[]> {
-    console.log(date);
-    return of(this.reminders);
+  constructor(private localStorageService: LocalStorageService) {
+    this.reminders = this.initRemindersStorage();
+    this.castReminders();
   }
 
   delete(reminderId: string): boolean {
     const idx = this.reminders.findIndex((x) => x.id === reminderId);
     this.reminders.splice(idx, 1);
 
-    this.updateReminders();
+    this.storeReminders();
+    this.castReminders();
 
     return true;
   }
 
-  save(data: Reminder): Reminder {
-    if (!data.id) {
-      data.id = Utils.generateNewId();
-      this.reminders.push(data);
-    } else {
-      this.reminders = this.reminders.map((x) =>
-        x.id === data.id ? { ...data } : x
-      );
-    }
-
-    this.updateReminders();
-
-    return data;
+  onRemindersUpdated$(): Observable<Reminder[]> {
+    return this.calendarSubject.asObservable();
   }
 
-  updateReminders(): void {
+  save(reminder: Reminder): void {
+    if (!reminder.id) {
+      reminder.id = Utils.generateNewId();
+      this.reminders.push(reminder);
+    } else {
+      const remiderIdx = this.reminders.findIndex((x) => x.id === reminder.id);
+      this.reminders[remiderIdx] = { ...reminder };
+    }
+
+    this.storeReminders();
+    this.castReminders();
+  }
+
+  private castReminders(): void {
     this.calendarSubject.next(this.reminders);
+  }
+
+  private initRemindersStorage(): Reminder[] {
+    const savedReminders = this.localStorageService.get<Reminder[]>(
+      this.REMINDERS_KEY
+    );
+
+    if (savedReminders === undefined) {
+      this.localStorageService.save<Reminder[]>(this.REMINDERS_KEY, []);
+      return [];
+    } else {
+      return savedReminders;
+    }
+  }
+
+  private storeReminders(): void {
+    this.localStorageService.save<Reminder[]>(
+      this.REMINDERS_KEY,
+      this.reminders
+    );
   }
 }

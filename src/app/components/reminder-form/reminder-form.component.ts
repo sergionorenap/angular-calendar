@@ -42,7 +42,7 @@ export class ReminderFormComponent implements OnInit {
     ],
     date: ['', Validators.compose([Validators.required])],
     time: ['', Validators.compose([Validators.required])],
-    color: ['', Validators.compose([Validators.required])],
+    color: ['none', Validators.compose([Validators.required])],
     city: [''],
   });
 

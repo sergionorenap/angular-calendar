@@ -4,13 +4,7 @@
   <mat-dialog-content>
     <form [formGroup]="reminderForm" class="reminder-form">
       <mat-form-field class="form-field">
-        <input
-          matInput
-          type="text"
-          placeholder="Description *"
-          formControlName="text"
-          maxlength="30"
-        />
+        <input matInput type="text" placeholder="Description *" formControlName="text" maxlength="30" />
       </mat-form-field>
 
       <mat-form-field class="form-field">
@@ -21,34 +15,21 @@
         </mat-select>
       </mat-form-field>
 
-      <app-city-picker
-        [required]="true"
-        [defaultSelectedCity]="reminder?.city"
-        (selectedCity)="onSelectedCityChanges($event)"
-      ></app-city-picker>
+      <app-city-picker [required]="false" [defaultSelectedCity]="reminder?.city"
+        (selectedCity)="onSelectedCityChanges($event)"></app-city-picker>
 
-      <app-time-picker
-        [defaultSelectedTime]="reminder?.time"
-        (onSelectedTime)="onSelectedTimeChanges($event)"
-      ></app-time-picker>
+      <app-time-picker [defaultSelectedTime]="reminder?.time"
+        (onSelectedTime)="onSelectedTimeChanges($event)"></app-time-picker>
 
       <div class="date-section">
-        <app-calendar-table
-          [mini]="true"
-          [defaultSelectedDate]="reminder?.date || selectedDate"
-          (onSelectedDate)="onSelectedDateChanges($event)"
-        ></app-calendar-table>
+        <app-calendar-table [mini]="true" [defaultSelectedDate]="reminder?.date || selectedDate"
+          (onSelectedDate)="onSelectedDateChanges($event)"></app-calendar-table>
       </div>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions class="dialog-actions">
     <button mat-button [mat-dialog-close]="true">Cancel</button>
-    <button
-      mat-raised-button
-      color="primary"
-      [disabled]="reminderForm.invalid"
-      (click)="onSaveReminder()"
-    >
+    <button mat-raised-button color="primary" [disabled]="reminderForm.invalid" (click)="onSaveReminder()">
       Save
     </button>
   </mat-dialog-actions>

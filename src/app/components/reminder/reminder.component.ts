@@ -20,7 +20,8 @@ export class ReminderComponent implements OnInit {
   ngOnInit(): void {
     this.reminder = this.data;
     this.showWeatherInfo =
-      new Date(`${this.reminder.date} ${this.reminder.time}`) >= new Date();
+      new Date(`${this.reminder.date} ${this.reminder.time}`) >= new Date() &&
+      this.reminder.city !== '';
   }
 
   close(isEdit: boolean): void {
