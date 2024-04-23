@@ -1,6 +1,13 @@
 <section class="weather-section">
-  <span *ngIf="!weather">{{ loadStatus }}</span>
-  <div class="weather-info" *ngIf="weather">
+  @if (isLoading) {
+  <span class="load-status">{{ loadStatus }}</span>
+  } @else {
+  <div class="weather-info">
+
+    <span>
+      <img [src]="weather.iconUrl" [alt]="weather.description" class="forecast-image" />
+    </span>
+
     <span>
       <span class="city-name">{{ city }}</span>
       <br />
@@ -9,16 +16,16 @@
       <small class="w-description">
         {{ weather.description }}
       </small>
-      <small *ngIf="!weather.isForecast" class="forecast-info"
-        >No weather forecast available for this date. <br />
-        Showing today's weather</small
-      >
-      <small *ngIf="weather.isForecast" class="forecast-info"
-        >Weather forecast</small
-      >
+      <small class="forecast-info">
+        @if (weather.isForecast) {
+        Weather forecast
+        } @else {
+        No weather forecast available for this date. <br />
+        Showing today's weather
+        }
+      </small>
     </span>
-    <span>
-      <img src="{{ weather.iconUrl }}" alt="Icon {{ weather.description }}" />
-    </span>
+
   </div>
+  }
 </section>

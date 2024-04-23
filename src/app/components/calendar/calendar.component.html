@@ -1,9 +1,15 @@
 <mat-toolbar>
   <span>Angular Calendar</span>
+
+  @if (loading$ | async) {
+  <span class="spacer"></span>
+  <span class="loading">loading...</span>
+  }
+
   <span class="spacer"></span>
   <button mat-button (click)="openReminderForm()">
     <mat-icon>add</mat-icon> New reminder
   </button>
 </mat-toolbar>
 
-<app-calendar-table [reminders]="reminders"></app-calendar-table>
+<app-calendar-table></app-calendar-table>

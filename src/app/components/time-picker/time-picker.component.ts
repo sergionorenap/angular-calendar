@@ -1,14 +1,24 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Utils } from 'src/app/utilities/utils';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Utils } from '../../utilities/utils';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-time-picker',
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule],
   templateUrl: './time-picker.component.html',
-  styleUrls: ['./time-picker.component.scss'],
+  styleUrl: './time-picker.component.scss',
 })
 export class TimePickerComponent implements OnInit {
-  @Input() defaultSelectedTime: string;
+  @Input() defaultSelectedTime: string | undefined = '';
   @Output() onSelectedTime = new EventEmitter<string>();
 
   constructor(private formBuilder: FormBuilder) {}

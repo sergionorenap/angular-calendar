@@ -1,4 +1,13 @@
-import { environment } from 'src/environments/environment';
+// import { environment } from 'src/environments/environment';
+
+export const environment = {
+  production: false,
+  weatherAPI: {
+    apiKey: '5157ed6d63cb4e227fc2e8f12060b6d5',
+    endpoint: 'https://api.openweathermap.org/data/2.5',
+    resourcesEndpoint: 'http://openweathermap.org',
+  },
+};
 
 export const CURRENT_WEATHER_EP = (city: string, units: string = 'metric') => {
   return `${environment.weatherAPI.endpoint}/weather?appid=${environment.weatherAPI.apiKey}&units=${units}&q=${city}`;

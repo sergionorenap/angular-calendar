@@ -1,17 +1,8 @@
-<div
-  class="reminder"
-  [ngClass]="reminder.color"
-  (click)="openReminderDetails($event)"
->
-  <span title="{{ reminder.text }}"
-    >{{ reminder.text }}
-    <button
-      class="delete-btn"
-      mat-icon-button
-      title="Delete"
-      (click)="deleteReminder($event)"
-    >
-      <mat-icon>close</mat-icon>
-    </button>
+<div class="reminder" [ngClass]="reminder.color" (click)="openReminderDetails($event)">
+  <span [title]="reminder.text">
+    {{ reminder.text }}
   </span>
+  <button class="delete-btn" mat-icon-button title="Delete" (click)="deleteReminder($event)">
+    <mat-icon>close</mat-icon>
+  </button>
 </div>

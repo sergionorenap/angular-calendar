@@ -21,7 +21,7 @@ export class LocalStorageService {
     return false;
   }
 
-  delete<T>(key: string): T {
+  delete<T>(key: string): T | undefined {
     const item = localStorage.getItem(key);
 
     if (item) {

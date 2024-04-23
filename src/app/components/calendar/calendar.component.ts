@@ -1,47 +1,62 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
-import { Reminder } from 'src/app/interfaces/reminder';
-import { CalendarService } from 'src/app/services/calendar.service';
-import { ReminderFormComponent } from '../reminder-form/reminder-form.component';
-import { ReminderService } from 'src/app/services/reminder.service';
+import { CalendarTableComponent } from '../calendar-table/calendar-table.component';
+import { ReminderService } from '../../services/reminder.service';
+import { Reminder } from '../../core/models/reminder';
+import { ReminderActionsEnum } from '../../core/enums/reminder-actions.enum';
 import { ReminderComponent } from '../reminder/reminder.component';
-import { ReminderActionsEnum } from 'src/app/enums/reminder-actions.enum';
+import { ReminderFormComponent } from '../reminder-form/reminder-form.component';
+import { AppState } from '../../state/app.state';
+import {
+  RemindersActions,
+  RemindersApiActions,
+} from '../../state/actions/reminders.actions';
+import { selectRetrievingReminders } from '../../state/selectors/reminders.selector';
+import { Utils } from '../../utilities/utils';
 
 @Component({
   selector: 'app-calendar',
+  standalone: true,
+  imports: [
+    CommonModule,
+    CalendarTableComponent,
+    MatIconModule,
+    MatButtonModule,
+    MatToolbarModule,
+  ],
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss'],
+  styleUrl: './calendar.component.scss',
 })
-export class CalendarComponent implements OnInit, OnDestroy {
-  onDestroy$ = new Subject<boolean>();
-
-  reminders: Reminder[] = [];
-
-  private subscriptions = new Subscription();
+export class CalendarComponent implements OnInit {
+  loading$: Observable<boolean> = new Observable();
 
   constructor(
     private matDialog: MatDialog,
-    private calendarService: CalendarService,
-    private reminderService: ReminderService
+    private store: Store<AppState>,
+    private reminderService: ReminderService // TODO
   ) {}
 
   ngOnInit(): void {
-    this.subscribeToCalendarReminders();
+    this.loadReminders();
+
+    // TODO
     this.subscribeToReminderActions();
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
+  ngOnDestroy(): void {}
 
   openReminderDetails(reminder: Reminder): void {
     const dialogRef = this.matDialog.open(ReminderComponent, {
       width: '400px',
       data: reminder,
     });
-
     dialogRef.afterClosed().subscribe((data) => {
       if (typeof data !== 'boolean' && data) {
         if (data.isEdit) {
@@ -58,7 +73,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
       width: '540px',
       data: { reminder, selectedDate },
     });
-
     dialogRef.afterClosed().subscribe((newReminder) => {
       if (typeof newReminder !== 'boolean' && newReminder) {
         this.goToSaveReminder(newReminder);
@@ -67,24 +81,25 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   private goToDeleteReminder(reminderId: string): void {
-    this.calendarService.delete(reminderId);
+    this.store.dispatch(RemindersActions.deleteReminder({ reminderId }));
   }
 
   private goToSaveReminder(reminder: Reminder): void {
-    this.calendarService.save(reminder);
+    if (reminder.id === '') {
+      reminder.id = Utils.generateNewId();
+      this.store.dispatch(RemindersActions.addReminder({ reminder }));
+    } else {
+      this.store.dispatch(RemindersActions.updateReminder({ reminder }));
+    }
   }
 
-  private subscribeToCalendarReminders() {
-    this.subscriptions.add(
-      this.calendarService
-        .onRemindersUpdated$()
-        .subscribe((reminders) => (this.reminders = [...reminders]))
-    );
+  private loadReminders(): void {
+    this.loading$ = this.store.select(selectRetrievingReminders);
+    this.store.dispatch(RemindersApiActions.retrieveReminders());
   }
 
   private subscribeToReminderActions(): void {
     this.reminderService.reminderObservable.subscribe((result) => {
-
       switch (result.action) {
         case ReminderActionsEnum.CREATE:
           this.openReminderForm(undefined, result.data);

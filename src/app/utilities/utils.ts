@@ -1,5 +1,5 @@
-import * as moment from 'moment';
-import * as uuid from 'uuid';
+import moment from 'moment';
+import { v4 as uuidv4 } from 'uuid';
 
 export type DateTime = moment.Moment;
 
@@ -9,7 +9,7 @@ export class Utils {
   }
 
   public static generateNewId(): string {
-    return uuid.v4().split('-')[0];
+    return uuidv4().split('-')[0];
   }
 
   public static getDayOfMonth(date: moment.Moment): number {

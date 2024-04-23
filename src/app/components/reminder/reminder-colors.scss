@@ -10,38 +10,50 @@ $light-text: #fff;
 $dark-text: #444;
 
 .reminder {
-  &.none {
+
+  &.none,
+  &.none * {
     background-color: $none;
     color: $dark-text;
   }
 
-  &.red {
+  &.red,
+  &.red * {
     background-color: $red;
     color: $light-text;
   }
 
-  &.blue {
+  &.blue,
+  &.blue * {
     background-color: $blue;
     color: $light-text;
   }
 
-  &.yellow {
+  &.yellow,
+  &.yellow * {
     background-color: $yellow;
     color: $dark-text;
   }
 
-  &.orange {
+  &.orange,
+  &.orange * {
     background-color: $orange;
     color: $light-text;
   }
 
-  &.green {
+  &.green,
+  &.green * {
     background-color: $green;
     color: $light-text;
   }
 
-  &.purple {
+  &.purple,
+  &.purple * {
     background-color: $purple;
     color: $light-text;
+  }
+
+  .mat-icon {
+    background-color: transparent !important;
   }
 }

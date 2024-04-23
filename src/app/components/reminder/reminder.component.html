@@ -1,45 +1,35 @@
-<mat-dialog-content class="reminder" [ngClass]="reminder.color">
-  <h1 mat-dialog-title>
-    {{ reminder.text }}
-  </h1>
-  <div class="time-info">
-    <span>
-      {{ reminder.date | date: "dd/MM/yyyy" }}
-    </span>
-    <span>
-      {{ reminder.time }}
-    </span>
-    <span *ngIf="!showWeatherInfo && reminder.city">
-      {{ reminder.city }}
-    </span>
-  </div>
-  <mat-divider *ngIf="showWeatherInfo"></mat-divider>
-  <app-weather-info
-    *ngIf="showWeatherInfo"
-    [city]="reminder.city"
-    [dateTime]="reminder.date + ' ' + reminder.time"
-  ></app-weather-info>
-</mat-dialog-content>
-<mat-dialog-actions class="dialog-actions">
-  <div>
-    <button
-      mat-raised-button
-      color="primary"
-      class="options-btn"
-      (click)="close(true)"
-    >
+<div class="reminder" [ngClass]="reminder.color">
+  <h2 mat-dialog-title>{{ reminder.text }}</h2>
+  <mat-dialog-content>
+    <div class="time-info">
+      <span>
+        {{ reminder.date | date: "dd/MM/yyyy" }}
+      </span>
+      <span>
+        {{ reminder.time }}
+      </span>
+      @if (!showWeatherInfo && reminder.city) {
+      <span>
+        {{ reminder.city }}
+      </span>
+      }
+    </div>
+    @if (showWeatherInfo) {
+    <mat-divider></mat-divider>
+    <app-weather-info [city]="reminder.city" [dateTime]="reminder.date + ' ' + reminder.time"></app-weather-info>
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="close(true)">
       <mat-icon>edit</mat-icon>
       Edit
     </button>
-    <button
-      mat-raised-button
-      color="warn"
-      class="options-btn"
-      (click)="close(false)"
-    >
+    <button mat-button (click)="close(false)">
       <mat-icon>delete</mat-icon>
       Delete
     </button>
-  </div>
-  <button mat-raised-button [mat-dialog-close]="true">Close</button>
-</mat-dialog-actions>
+    <button mat-button mat-dialog-close cdkFocusInitial>
+      Close
+    </button>
+  </mat-dialog-actions>
+</div>

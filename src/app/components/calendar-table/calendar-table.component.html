@@ -1,42 +1,54 @@
-<div [ngClass]="{ 'mini-calendar': mini, 'big-calendar': !mini }" class="calendar">
+<div class="calendar" [class.mini-calendar]="mini" [class.big-calendar]="!mini">
   <div class="calendar-info">
     <button type="button" mat-mini-fab color="primary" (click)="onChangeCalendarMonth(false)" title="Previous month">
       <mat-icon>arrow_back</mat-icon>
     </button>
 
-    <span>{{ currentCalendarMonth | date: "MMMM, yyyy" }}</span>
+    <span>{{ momentToDate(currentCalendarMonth) | date: "MMMM, yyyy" }}</span>
 
     <button type="button" mat-mini-fab color="primary" (click)="onChangeCalendarMonth(true)" title="Next month">
       <mat-icon>arrow_forward</mat-icon>
     </button>
   </div>
 
-  <ul *ngIf="!mobileQuery.matches || mini">
-    <li *ngFor="let day of weekDays">
+  @if (!mobileQuery.matches || mini) {
+  <ul>
+    @for (day of weekDays; track day) {
+    <li>
       <span>
         {{ day }}
       </span>
     </li>
+    }
   </ul>
-  <ul *ngIf="mobileQuery.matches && !mini">
-    <li *ngFor="let day of shortWeekDays">
+  }
+
+  @if (mobileQuery.matches && !mini) {
+  <ul>
+    @for (day of shortWeekDays; track day) {
+    <li>
       <span>
         {{ day }}
       </span>
     </li>
+    }
   </ul>
+  }
+
   <ol>
-    <li *ngFor="let day of calendarDays; let first = first" [style.gridColumnStart]="first ? day.dayInWeek + 1 : 'auto'"
-      (click)="onSelectedDateChanges(day.date)" [ngClass]="{
-        'selected-day': day.date === selectedDateStr,
-        today: day.isToday,
-        weekend: day.isWeekEnd
-      }">
+    @for (day of calendarDays; track day;let idx = $index) {
+    <li [style.gridColumnStart]="(idx === 0) ? day.dayInWeek + 1 : 'auto'"
+      [class.selected-day]="day.date === selectedDateStr" [class.today]="day.isToday" [class.weekend]="day.isWeekEnd"
+      (click)="onSelectedDateChanges(day.date)">
       <span>
         {{ day.dayInMonth }}
       </span>
 
-      <app-calendar-day *ngIf="!mini" [reminders]="day.reminders"></app-calendar-day>
+      @if (!mini) {
+      <app-calendar-day [reminders]="day.reminders"></app-calendar-day>
+      }
+
     </li>
+    }
   </ol>
 </div>

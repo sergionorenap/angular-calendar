@@ -3,11 +3,14 @@
   height: 110px;
 }
 
+.load-status {
+  font-size: 14px;
+}
+
 .weather-info {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  text-align: right;
 
   & span {
     font-size: 1.2rem;
@@ -15,6 +18,7 @@
     & .city-name {
       text-transform: capitalize;
     }
+
     & .w-description {
       font-size: 0.9rem;
     }
@@ -23,7 +27,15 @@
       font-size: 0.7rem;
       font-style: italic;
       display: block;
-      line-height: 85%;
+      line-height: 0.7rem;
     }
+
+    & .forecast-image {
+      filter: drop-shadow(0px 0px 2px #888);
+    }
+  }
+
+  & span:last-child {
+    flex-grow: 1;
   }
 }

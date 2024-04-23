@@ -1,6 +1,12 @@
 <div class="reminder-form-container">
-  <h2 *ngIf="!isEditMode" mat-dialog-title>New reminder</h2>
-  <h2 *ngIf="isEditMode" mat-dialog-title>Edit reminder</h2>
+  <h2 mat-dialog-title>
+    @if (isEditMode) {
+    Edit reminder
+    } @else {
+    New reminder
+    }
+  </h2>
+
   <mat-dialog-content>
     <form [formGroup]="reminderForm" class="reminder-form">
       <mat-form-field class="form-field">
@@ -9,27 +15,29 @@
 
       <mat-form-field class="form-field">
         <mat-select placeholder="Color *" formControlName="color">
-          <mat-option *ngFor="let color of colors" [value]="color">
+          @for (color of colors; track color) {
+          <mat-option [value]="color">
             {{ color | titlecase }}
           </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
-      <app-city-picker [required]="false" [defaultSelectedCity]="reminder?.city"
+      <app-city-picker [required]="false" [defaultSelectedCity]="reminder.city"
         (selectedCity)="onSelectedCityChanges($event)"></app-city-picker>
 
-      <app-time-picker [defaultSelectedTime]="reminder?.time"
+      <app-time-picker [defaultSelectedTime]="reminder.time"
         (onSelectedTime)="onSelectedTimeChanges($event)"></app-time-picker>
 
       <div class="date-section">
-        <app-calendar-table [mini]="true" [defaultSelectedDate]="reminder?.date || selectedDate"
+        <app-calendar-table [mini]="true" [defaultSelectedDate]="reminder.date || selectedDate"
           (onSelectedDate)="onSelectedDateChanges($event)"></app-calendar-table>
       </div>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions class="dialog-actions">
     <button mat-button [mat-dialog-close]="true">Cancel</button>
-    <button mat-raised-button color="primary" [disabled]="reminderForm.invalid" (click)="onSaveReminder()">
+    <button mat-flat-button color="primary" [disabled]="reminderForm.invalid" (click)="onSaveReminder()">
       Save
     </button>
   </mat-dialog-actions>

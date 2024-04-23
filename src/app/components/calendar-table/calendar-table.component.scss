@@ -88,18 +88,10 @@ $weekend-color: #f0f0f0;
       cursor: pointer;
       height: $header-height;
 
-      &.selected-day {
-        background-color: $active-color;
-        color: $light-text-color;
-        transform: scale(1.1);
-        font-size: 0.9rem;
-      }
-
+      &.selected-day,
       &:active {
         background-color: $active-color;
         color: $light-text-color;
-        transform: scale(1.1);
-        font-size: 0.9rem;
       }
     }
   }
@@ -114,7 +106,7 @@ $weekend-color: #f0f0f0;
   width: 100%;
   height: calc(100vh - 64px);
 
-  & > ul {
+  &>ul {
     height: $header-height;
   }
 
@@ -127,7 +119,7 @@ $weekend-color: #f0f0f0;
       border: solid $hover-color 1px;
       overflow: auto;
 
-      & > span {
+      &>span {
         font-weight: bold;
       }
     }
@@ -146,6 +138,8 @@ $weekend-color: #f0f0f0;
 }
 
 .big-calendar ol li {
+  overflow-x: hidden;
+
   &::-webkit-scrollbar {
     width: 5px;
   }
@@ -182,7 +176,7 @@ $weekend-color: #f0f0f0;
       & li {
         padding: 0;
 
-        & > span {
+        &>span {
           margin-left: 6px;
         }
 

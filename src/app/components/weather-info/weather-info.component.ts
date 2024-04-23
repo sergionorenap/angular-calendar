@@ -1,19 +1,22 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { WEATHER_ICON_EP } from 'src/app/config/config';
-import { Weather } from 'src/app/interfaces/weather';
-import { WeatherService } from 'src/app/services/weather.service';
+import { WEATHER_ICON_EP } from '../../config/config';
+import { WeatherService } from '../../services/api/weather.service';
+import { Weather } from '../../core/models/weather';
 
 @Component({
   selector: 'app-weather-info',
+  standalone: true,
+  imports: [],
   templateUrl: './weather-info.component.html',
-  styleUrls: ['./weather-info.component.scss'],
+  styleUrl: './weather-info.component.scss',
 })
 export class WeatherInfoComponent implements OnInit {
-  @Input() city: string;
-  @Input() dateTime: string;
+  @Input() city: string | undefined = '';
+  @Input() dateTime: string = '';
 
-  weather: Weather;
-  loadStatus: string;
+  weather: Weather = {} as Weather;
+  isLoading: boolean = false;
+  loadStatus: string = '';
 
   constructor(private weatherService: WeatherService) {}
 
@@ -23,9 +26,11 @@ export class WeatherInfoComponent implements OnInit {
 
   private _getWeather() {
     if (this.city && this.dateTime) {
+      this.isLoading = true;
       this.loadStatus = 'Loading weather info...';
+
       this.weatherService.getWeatherInformation(this.city).subscribe(
-        (currentWeather) => {
+        (currentWeather: any) => {
           if (currentWeather.cod === 200) {
             this.weatherService
               .getForecastInformation(
@@ -33,7 +38,7 @@ export class WeatherInfoComponent implements OnInit {
                 currentWeather.coord.lon
               )
               .subscribe(
-                (forecastInfo) => {
+                (forecastInfo: any) => {
                   if (forecastInfo.cod === '200') {
                     const weatherForecast = this._filterForecastByDate(
                       forecastInfo.list,
@@ -53,15 +58,16 @@ export class WeatherInfoComponent implements OnInit {
                     };
                   }
 
+                  this.isLoading = false;
                   this.loadStatus = '';
                 },
-                (err) => {
+                (err: any) => {
                   this._showError(err);
                 }
               );
           }
         },
-        (err) => {
+        (err: any) => {
           this._showError(err);
         }
       );
@@ -80,7 +86,8 @@ export class WeatherInfoComponent implements OnInit {
     return filteredForecast ? filteredForecast[0] : undefined;
   }
 
-  private _showError(error): void {
+  private _showError(error: any): void {
+    this.isLoading = false;
     this.loadStatus = 'Sorry, weather information could not be obtained.';
     console.error(error);
   }

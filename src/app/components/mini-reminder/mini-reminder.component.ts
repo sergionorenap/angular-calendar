@@ -1,19 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ReminderActionsEnum } from 'src/app/enums/reminder-actions.enum';
-import { Reminder } from 'src/app/interfaces/reminder';
-import { ReminderService } from 'src/app/services/reminder.service';
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { Reminder } from '../../core/models/reminder';
+import { ReminderService } from '../../services/reminder.service';
+import { ReminderActionsEnum } from '../../core/enums/reminder-actions.enum';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-mini-reminder',
+  standalone: true,
+  imports: [CommonModule, MatIconModule, MatButtonModule],
   templateUrl: './mini-reminder.component.html',
-  styleUrls: ['./mini-reminder.component.scss'],
+  styleUrl: './mini-reminder.component.scss',
 })
-export class MiniReminderComponent implements OnInit {
-  @Input() reminder: Reminder;
+export class MiniReminderComponent {
+  @Input() reminder: Reminder = {} as Reminder;
 
   constructor(private reminderService: ReminderService) {}
-
-  ngOnInit(): void {}
 
   openReminderDetails(e: any): void {
     e.stopPropagation();

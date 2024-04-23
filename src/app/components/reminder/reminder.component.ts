@@ -1,15 +1,37 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-import { Reminder } from 'src/app/interfaces/reminder';
+import { Reminder } from '../../core/models/reminder';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose,
+} from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
+import { WeatherInfoComponent } from '../weather-info/weather-info.component';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-reminder',
+  standalone: true,
+  imports: [
+    MatDialogModule,
+    MatIconModule,
+    MatDividerModule,
+    CommonModule,
+    WeatherInfoComponent,
+    MatButtonModule,
+    MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose
+  ],
   templateUrl: './reminder.component.html',
-  styleUrls: ['./reminder.component.scss'],
+  styleUrl: './reminder.component.scss',
 })
 export class ReminderComponent implements OnInit {
-  reminder: Reminder;
+  reminder: Reminder = {} as Reminder;
   showWeatherInfo: boolean = false;
 
   constructor(

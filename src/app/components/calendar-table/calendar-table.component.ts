@@ -6,42 +6,41 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-
-import { CalendarDay } from 'src/app/interfaces/calendar-day';
-import { Reminder } from 'src/app/interfaces/reminder';
-import { Utils, DateTime } from 'src/app/utilities/utils';
-
 import { MediaMatcher } from '@angular/cdk/layout';
-import { ReminderService } from 'src/app/services/reminder.service';
-import { ReminderActionsEnum } from 'src/app/enums/reminder-actions.enum';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import { Store } from '@ngrx/store';
+
+import { Reminder } from '../../core/models/reminder';
+import { CalendarDay } from '../../core/models/calendar-day';
+import { DateTime, Utils } from '../../utilities/utils';
+import { ReminderActionsEnum } from '../../core/enums/reminder-actions.enum';
+import moment, { Moment } from 'moment';
+import { ReminderService } from '../../services/reminder.service';
+import { CalendarDayComponent } from '../calendar-day/calendar-day.component';
+import { AppState } from '../../state/app.state';
+import { selectReminderList } from '../../state/selectors/reminders.selector';
 
 @Component({
   selector: 'app-calendar-table',
+  standalone: true,
+  imports: [MatIconModule, MatButtonModule, CommonModule, CalendarDayComponent],
   templateUrl: './calendar-table.component.html',
-  styleUrls: ['./calendar-table.component.scss'],
+  styleUrl: './calendar-table.component.scss',
 })
 export class CalendarTableComponent implements OnInit {
   @Input() mini: boolean = false;
-  @Input() defaultSelectedDate: string;
-  @Input() set reminders(reminders: Reminder[]) {
-    this.remindersArr = reminders;
-
-    if (this.currentCalendarMonth) {
-      this.getCalendarDays(
-        Utils.getYear(this.currentCalendarMonth),
-        Utils.getMonth(this.currentCalendarMonth)
-      );
-    }
-  }
+  @Input() defaultSelectedDate: string | undefined = '';
   @Output() onSelectedDate = new EventEmitter<string>();
 
-  weekDays: string[];
-  shortWeekDays: string[];
-  remindersArr: Reminder[];
-  calendarDays: CalendarDay[];
-  currentCalendarMonth: DateTime;
-  selectedDateStr: string;
-  today: DateTime;
+  weekDays: string[] = [];
+  shortWeekDays: string[] = [];
+  remindersArr: Reminder[] = [];
+  calendarDays: CalendarDay[] = [];
+  currentCalendarMonth: DateTime = moment();
+  selectedDateStr: string = '';
+  today: DateTime = moment();
 
   mobileQuery: MediaQueryList;
   private queryListener: () => void;
@@ -49,6 +48,7 @@ export class CalendarTableComponent implements OnInit {
   constructor(
     changeDetector: ChangeDetectorRef,
     media: MediaMatcher,
+    private store: Store<AppState>,
     private reminderService: ReminderService
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 640px)');
@@ -57,12 +57,27 @@ export class CalendarTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.retrieveReminders();
+
     this.weekDays = this.mini
       ? Utils.getMinWeekDayNames()
       : Utils.getWeekDayNames();
     this.shortWeekDays = Utils.getShortWeekDayNames();
 
     this.firstCalendarSetup();
+  }
+
+  private retrieveReminders(): void {
+    this.store.select(selectReminderList).subscribe((reminders) => {
+      this.remindersArr = [...reminders];
+
+      if (this.currentCalendarMonth) {
+        this.getCalendarDays(
+          Utils.getYear(this.currentCalendarMonth),
+          Utils.getMonth(this.currentCalendarMonth)
+        );
+      }
+    });
   }
 
   onChangeCalendarMonth(goToFuture: boolean): void {
@@ -142,5 +157,9 @@ export class CalendarTableComponent implements OnInit {
     }
 
     return [];
+  }
+
+  momentToDate(dateTime: DateTime): Date {
+    return dateTime.toDate();
   }
 }

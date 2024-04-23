@@ -1,15 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Reminder } from 'src/app/interfaces/reminder';
+import { Component, Input } from '@angular/core';
+import { Reminder } from '../../core/models/reminder';
+import { MiniReminderComponent } from '../mini-reminder/mini-reminder.component';
 
 @Component({
   selector: 'app-calendar-day',
+  standalone: true,
+  imports: [MiniReminderComponent],
   templateUrl: './calendar-day.component.html',
-  styleUrls: ['./calendar-day.component.scss'],
+  styleUrl: './calendar-day.component.scss',
 })
-export class CalendarDayComponent implements OnInit {
-  @Input() reminders: Reminder[];
-
-  constructor() {}
-
-  ngOnInit(): void {}
+export class CalendarDayComponent {
+  @Input() reminders: Reminder[] = [];
 }
