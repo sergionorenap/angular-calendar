@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Reminder } from '../../core/models/reminder';
+import { CommonModule } from '@angular/common';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
@@ -10,10 +10,14 @@ import {
   MatDialogClose,
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
+import { Store } from '@ngrx/store';
+
+import { AppState } from '../../state/app.state';
+import { Reminder } from '../../core/models/reminder.model';
 import { WeatherInfoComponent } from '../weather-info/weather-info.component';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { WeatherApiActions } from '../../state/actions/weather-forecast.actions';
 
 @Component({
   selector: 'app-reminder',
@@ -25,7 +29,10 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
     CommonModule,
     WeatherInfoComponent,
     MatButtonModule,
-    MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogClose,
   ],
   templateUrl: './reminder.component.html',
   styleUrl: './reminder.component.scss',
@@ -36,19 +43,33 @@ export class ReminderComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Reminder,
-    private dialogRef: MatDialogRef<ReminderComponent>
+    private dialogRef: MatDialogRef<ReminderComponent>,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    this.reminder = this.data;
+    this.reminder = { ...this.data };
     this.showWeatherInfo =
       new Date(`${this.reminder.date} ${this.reminder.time}`) >= new Date() &&
       this.reminder.city !== '';
+
+    if (this.showWeatherInfo) {
+      this.getWeatherInfo();
+    }
   }
 
   close(isEdit: boolean): void {
     this.dialogRef.close({
       isEdit: isEdit,
     });
+  }
+
+  private getWeatherInfo(): void {
+    this.store.dispatch(
+      WeatherApiActions.retrieveWeather({
+        city: this.reminder.city || '',
+        dateTime: `${this.reminder.date} ${this.reminder.time}`,
+      })
+    );
   }
 }

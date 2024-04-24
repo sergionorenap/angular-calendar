@@ -1,5 +1,3 @@
-// import { environment } from 'src/environments/environment';
-
 export const environment = {
   production: false,
   weatherAPI: {

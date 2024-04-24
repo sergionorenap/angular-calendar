@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 
 import { CalendarTableComponent } from '../calendar-table/calendar-table.component';
 import { ReminderService } from '../../services/reminder.service';
-import { Reminder } from '../../core/models/reminder';
+import { Reminder } from '../../core/models/reminder.model';
 import { ReminderActionsEnum } from '../../core/enums/reminder-actions.enum';
 import { ReminderComponent } from '../reminder/reminder.component';
 import { ReminderFormComponent } from '../reminder-form/reminder-form.component';

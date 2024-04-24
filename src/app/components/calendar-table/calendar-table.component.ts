@@ -12,8 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 
-import { Reminder } from '../../core/models/reminder';
-import { CalendarDay } from '../../core/models/calendar-day';
+import { Reminder } from '../../core/models/reminder.model';
+import { CalendarDay } from '../../core/models/calendar-day.model';
 import { DateTime, Utils } from '../../utilities/utils';
 import { ReminderActionsEnum } from '../../core/enums/reminder-actions.enum';
 import moment, { Moment } from 'moment';

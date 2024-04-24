@@ -1,11 +1,15 @@
 import { ActionReducerMap } from '@ngrx/store';
-import { RemindersState } from '../core/models/reminder.state';
-import { remindersReducer } from './reducers/reminders.reducer';
+import { RemindersState } from './models/reminders.state';
+import { WeatherForecastState } from './models/weather-forecast.state';
+import { WeatherForecastReducer } from './reducers/weather-forecast.reducer';
+import { RemindersReducer } from './reducers/reminders.reducer';
 
 export interface AppState {
   remindersState: RemindersState;
+  weatherForecastState: WeatherForecastState;
 }
 
 export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
-  remindersState: remindersReducer,
+  remindersState: RemindersReducer,
+  weatherForecastState: WeatherForecastReducer,
 };

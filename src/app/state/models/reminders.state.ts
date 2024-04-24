@@ -1,4 +1,4 @@
-import { Reminder } from './reminder';
+import { Reminder } from '../../core/models/reminder.model';
 
 export interface RemindersState {
   loading: boolean;

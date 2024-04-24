@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Reminder } from '../../core/models/reminder';
+import { Reminder } from '../../core/models/reminder.model';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,

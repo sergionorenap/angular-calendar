@@ -1,6 +1,6 @@
 <section class="weather-section">
-  @if (isLoading) {
-  <span class="load-status">{{ loadStatus }}</span>
+  @if ((loading$ | async) || (failed$ | async)) {
+  <span class="load-status">{{ status$ | async }}</span>
   } @else {
   <div class="weather-info">
 
@@ -9,7 +9,7 @@
     </span>
 
     <span>
-      <span class="city-name">{{ city }}</span>
+      <span class="city-name">{{ weather.city }}</span>
       <br />
       {{ weather.tempMin }}°
       <br />

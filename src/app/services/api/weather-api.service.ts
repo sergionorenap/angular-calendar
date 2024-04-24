@@ -6,7 +6,7 @@ import { CURRENT_WEATHER_EP, WEATHER_FORECAST_EP } from '../../config/config';
 @Injectable({
   providedIn: 'root',
 })
-export class WeatherService {
+export class WeatherApiService {
   constructor(private http: HttpClient) {}
 
   getWeatherInformation(city: string): Observable<any> {

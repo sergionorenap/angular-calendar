@@ -7,8 +7,8 @@ import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 import { routes } from './app.routes';
+import { ROOT_EFFECTS } from './state/app.effects';
 import { ROOT_REDUCERS } from './state/app.state';
-import { RemindersEffects } from './state/effects/reminders.effect';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +17,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideStore(ROOT_REDUCERS),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideEffects([RemindersEffects]),
+    provideEffects(ROOT_EFFECTS),
   ],
 };

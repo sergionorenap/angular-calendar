@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Reminder } from '../../core/models/reminder';
+import { Reminder } from '../../core/models/reminder.model';
 import { MiniReminderComponent } from '../mini-reminder/mini-reminder.component';
 
 @Component({
@@ -10,5 +10,5 @@ import { MiniReminderComponent } from '../mini-reminder/mini-reminder.component'
   styleUrl: './calendar-day.component.scss',
 })
 export class CalendarDayComponent {
-  @Input() reminders: Reminder[] = [];
+  @Input() reminders: Reminder[] = []; // TODO create a Select for this
 }

@@ -1,5 +1,5 @@
 import { createActionGroup, props } from '@ngrx/store';
-import { Reminder } from '../../core/models/reminder';
+import { Reminder } from '../../core/models/reminder.model';
 
 export const RemindersActions = createActionGroup({
   source: 'Reminders',

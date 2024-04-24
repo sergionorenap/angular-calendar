@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { Reminder } from '../../core/models/reminder';
+import { Reminder } from '../../core/models/reminder.model';
 import { ReminderService } from '../../services/reminder.service';
 import { ReminderActionsEnum } from '../../core/enums/reminder-actions.enum';
 import { MatButtonModule } from '@angular/material/button';

@@ -1,4 +1,4 @@
-import { Weather } from './weather';
+import { WeatherForecast } from './weather-forecast.model';
 
 export interface Reminder {
   id: string;
@@ -7,5 +7,5 @@ export interface Reminder {
   time: string;
   color: string;
   city?: string;
-  weather?: Weather;
+  weatherForecast?: WeatherForecast;
 }

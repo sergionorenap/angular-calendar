@@ -1,13 +1,13 @@
 import { createReducer, on } from '@ngrx/store';
-import { RemindersState } from '../../core/models/reminder.state';
 import {
   RemindersActions,
   RemindersApiActions,
 } from '../actions/reminders.actions';
+import { RemindersState } from '../models/reminders.state';
 
-export const initialState: RemindersState = { loading: false, reminders: [] };
+const initialState: RemindersState = { loading: false, reminders: [] };
 
-export const remindersReducer = createReducer(
+export const RemindersReducer = createReducer(
   initialState,
   on(RemindersApiActions.retrieveReminders, (state) => {
     return {

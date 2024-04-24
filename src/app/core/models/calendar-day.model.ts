@@ -1,4 +1,4 @@
-import { Reminder } from './reminder';
+import { Reminder } from './reminder.model';
 
 export interface CalendarDay {
   name: string;

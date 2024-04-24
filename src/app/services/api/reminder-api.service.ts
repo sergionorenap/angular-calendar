@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { LocalStorageService } from '../local-storage.service';
-import { Reminder } from '../../core/models/reminder';
+import { Reminder } from '../../core/models/reminder.model';
 import { AppState } from '../../state/app.state';
 import { selectReminderList } from '../../state/selectors/reminders.selector';
 
