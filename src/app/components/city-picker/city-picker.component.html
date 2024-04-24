@@ -1,7 +1,7 @@
 <form [formGroup]="cityForm">
   <mat-form-field>
     <mat-label>City</mat-label>
-    <input type="text" placeholder="Pick one" matInput formControlName="city" [matAutocomplete]="autoCompleteCities" />
+    <input type="text" placeholder="pick one" matInput formControlName="city" [matAutocomplete]="autoCompleteCities" />
     <mat-autocomplete autoActiveFirstOption #autoCompleteCities="matAutocomplete">
       @for (city of filteredCities$ | async; track city) {
       <mat-option [value]="city">
